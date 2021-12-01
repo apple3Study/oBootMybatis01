@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Emp">
+  <!-- Use type aliases to avoid typing the full classname every time. -->
+ 
+   <select id="listAll" parameterType="Emp" resultType="Emp">
+    <![CDATA[
+      select * from (select rownum rn, a.* from (select * from emp order by empno) a) 
+      where rn >= #{start} 
+      and   rn <= #{end}   	
+      ]]>
+   </select>
+   
+     <select id="listAll3" parameterType="Emp" resultType="Emp">
+      select * from (select rownum rn, a.* from (select * from emp
+    	 order by empno) a) where rn between #{start} and
+    	 #{end}   	
+   </select>
+   
+    <select id="total" resultType="int">
+     	select count(*) from emp
+   </select>
+   <insert id="insert" parameterType="Emp">
+ 	 insert into emp values (#{empno},#{ename},#{job},#{mgr},
+	 #{hiredate},#{sal},#{comm},#{deptno} ) 
+   </insert>
+   <select id="tkEmpSelOne"  parameterType="int" resultType="Emp" >
+       select * From emp Where empno = #{empno}   
+   </select>
+
+   <update id="TKempUpdate" parameterType="Emp">
+	 update emp set ename=#{ename}, job=#{job}, mgr=#{mgr},
+	    sal=#{sal}, 
+	    <if test="comm!=null"> 	comm=#{comm},    </if>
+	    deptno=#{deptno} where empno=#{empno}
+   </update>
+   
+   <delete id="delete" parameterType="int">
+	    delete from emp where empno=#{empno}
+   </delete> 
+  
+    <select id="selectManager" resultType="Emp">
+        SELECT   * 
+        FROM    emp 
+        WHERE   empno in (select mgr from emp)
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+</mapper>
